@@ -37,7 +37,7 @@ public class CinemaService {
             result.put("MovieList", movieListResponse);
 
         } catch (Exception e){
-            LOG.info("Exception : ");
+            LOG.info("Exception : " + e);
             e.getStackTrace();
         }
 

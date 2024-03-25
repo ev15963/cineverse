@@ -2,6 +2,7 @@ package com.example.cineverse.process;
 
 import com.example.cineverse.common.Utility;
 import com.example.cineverse.model.CinemaListModel;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,8 +12,10 @@ import org.springframework.util.MultiValueMap;
 
 @Service
 public class CinemaAPIConnect {
-    static String _url = "http://kobis.or.kr";
-    static final String _key = "aa439f24465fd638440fab41c9614382";
+    private String _url = "http://kobis.or.kr";
+
+    @Value("${spring.data.openapi.key}")
+    private String _key;
 
     public CinemaListModel.MovieListResponse SearchMovieList(CinemaListModel.MovieListRequest movieListRequest) throws JsonProcessingException
     {
