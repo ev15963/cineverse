@@ -1,7 +1,7 @@
 package com.example.cineverse.service;
 
 import com.example.cineverse.model.CinemaListModel;
-import com.example.cineverse.repos.CinemaRepository;
+// import com.example.cineverse.repos.CinemaRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.WriteConcern;
 import com.mongodb.bulk.BulkWriteResult;
