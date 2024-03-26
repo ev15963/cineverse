@@ -22,7 +22,7 @@ import java.util.HashMap;
  */
 
 @RestController
-@RequestMapping("/api/cinema/*")
+@RequestMapping("/api/cinema")
 public class CinemaController {
     @Autowired
     private CinemaService CinemaService;
@@ -34,10 +34,12 @@ public class CinemaController {
     public HashMap<String, Object> SearchCinema(@RequestParam(value="param",
             required = false, defaultValue="") String param)
     {
-        HashMap<String, Object> result;
+        HashMap<String, Object> result = null;
 
-        result = CinemaService.RunSearch(param);
-        mongoService.bulkInsertProducts(result);
+        for(int i=1; i<1010; i++) {
+            result = CinemaService.RunSearch(param, i);
+            mongoService.bulkInsertProducts(result);
+        }
 
         return result;
     }
