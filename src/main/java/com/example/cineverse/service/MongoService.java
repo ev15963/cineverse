@@ -1,8 +1,6 @@
 package com.example.cineverse.service;
 
 import com.example.cineverse.model.CinemaListModel;
-import com.example.cineverse.repos.CinemaRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.WriteConcern;
 import com.mongodb.bulk.BulkWriteResult;
 import org.slf4j.Logger;
@@ -24,28 +22,31 @@ public class MongoService {
     @Autowired
     MongoTemplate mongoTemplate;
 
-    public int bulkInsertProducts(HashMap<String, Object> result) {
+    public void bulkInsertProducts(HashMap<String, Object> result) {
 
         Instant start = Instant.now();
         mongoTemplate.setWriteConcern(WriteConcern.W1.withJournal(true));
 
-        CinemaListModel.MovieListResponse movieListResponse = (CinemaListModel.MovieListResponse) result.get("MovieList");
-        BulkOperations bulkInsertion = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, CinemaListModel.Movie.class);
+        BulkWriteResult bulkWriteResult = null;
+        try {
+            CinemaListModel.MovieListResponse movieListResponse = (CinemaListModel.MovieListResponse) result.get("MovieList");
+            BulkOperations bulkInsertion = mongoTemplate.bulkOps(BulkOperations.BulkMode.UNORDERED, CinemaListModel.Movie.class);
 
-        LOG.info("totcnt : " + String.valueOf(movieListResponse.getMovieListResult().getTotCnt()));
-        LOG.info("source : " + movieListResponse.getMovieListResult().getSource());
+            //LOG.info("totcnt : " + movieListResponse.getMovieListResult().getTotCnt());
 
-        for(CinemaListModel.Movie movie : movieListResponse.getMovieListResult().getMovieList()) {
-            //bulkInsertion.insert(movie);
-            LOG.info("제목 : " + movie.getMovieNm());
-            LOG.info("장르 : " + movie.getGenreAlt());
-            //LOG.info("제작사 : " + movie.getCompanys());
+            for (CinemaListModel.Movie movie : movieListResponse.getMovieListResult().getMovieList()) {
+                bulkInsertion.insert(movie);
+                //LOG.info("제목 : " + movie.getMovieNm());
+                //LOG.info("장르 : " + movie.getGenreAlt());
+                //LOG.info("제작사 : " + movie.getCompanys());
+            }
+
+            bulkWriteResult = bulkInsertion.execute();
+            LOG.info("Bulk insert of "+bulkWriteResult.getInsertedCount()+" documents completed in "+ Duration.between(start, Instant.now()).toMillis() + " milliseconds");
+
+        } catch (NullPointerException e) {
+            LOG.info("Exception : "+e.getMessage());
+        } finally {
         }
-
-        //BulkWriteResult bulkWriteResult = bulkInsertion.execute();
-        //LOG.info("Bulk insert of "+bulkWriteResult.getInsertedCount()+" documents completed in "+ Duration.between(start, Instant.now()).toMillis() + " milliseconds");
-
-        //return bulkWriteResult.getInsertedCount();
-        return 0;
     }
 }

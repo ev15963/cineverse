@@ -26,8 +26,10 @@ public class CinemaAPIConnect {
         CinemaListModel.MovieListResponse response= null;
 
         params.add("key", _key);
-        params.add("repNationCd", movieListRequest.getRepNationCd());
-        params.add("movieTypeCd", movieListRequest.getMovieTypeCd());
+        //params.add("repNationCd", movieListRequest.getRepNationCd());
+        //params.add("movieTypeCd", movieListRequest.getMovieTypeCd());
+        params.add("itemPerPage", movieListRequest.getItemPerPage());
+        params.add("curPage", movieListRequest.getCurPage());
 
         result = Utility.GetHttp(_url, urlPath, params);
 

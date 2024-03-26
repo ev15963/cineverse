@@ -47,7 +47,7 @@ public class MongoConfig   {
                 LOG.info("mongo doc : " + cursor.next().toJson());
             }
         } catch (NullPointerException e){
-            LOG.info("Expetion : ");
+            LOG.info("Expetion : " + e.getMessage());
             e.getStackTrace();
         } finally {
             cursor.close();

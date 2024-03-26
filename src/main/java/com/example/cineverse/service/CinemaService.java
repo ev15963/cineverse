@@ -15,7 +15,7 @@ public class CinemaService {
 
     private static final Logger LOG = LoggerFactory.getLogger(CinemaService.class);
 
-    public HashMap<String, Object> RunSearch(String param)
+    public HashMap<String, Object> RunSearch(String param, int curPage)
     {
         CinemaListModel.MovieListRequest movieListRequest = new CinemaListModel.MovieListRequest();
         CinemaListModel.MovieListResponse movieListResponse = null;
@@ -30,15 +30,20 @@ public class CinemaService {
             * 영화유형코드 2201
             */
             //movieListRequest.setRepNationCd("22041011"); //한국
-            movieListRequest.setMovieTypeCd("220101"); //장편
+            //movieListRequest.setMovieTypeCd("220101"); //장편
+
+            movieListRequest.setItemPerPage("100");
+            movieListRequest.setCurPage(String.valueOf(curPage));
             movieListResponse = CinemaAPIConnect.SearchMovieList(movieListRequest);
 
-            result.put("MovieListCard", MovieListCard(movieListResponse));
+            //result.put("MovieListCard", MovieListCard(movieListResponse));
             result.put("MovieList", movieListResponse);
 
         } catch (Exception e){
-            LOG.info("Exception : " + e);
+            LOG.info("Exception : " + e.getMessage());
+            LOG.info("에러 page : " + movieListRequest.getCurPage());
             e.getStackTrace();
+        } finally {
         }
 
         return result;
